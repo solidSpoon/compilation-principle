@@ -11,64 +11,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static xyz.solidspoon.lexer.util.ParseUtil.*;
+
 /**
  * 一个简单的手写的词法分析器。
  * 能够为后面的简单计算器、简单脚本语言产生Token。
  */
 public class SimpleLexer {
-
-    public static void main(String args[]) {
-        SimpleLexer lexer = new SimpleLexer();
-
-        String script = "int age = 45;";
-        System.out.println("parse :" + script);
-        SimpleTokenReader tokenReader = lexer.tokenize(script);
-        dump(tokenReader);
-
-        //测试inta的解析
-        script = "inta age = 45;";
-        System.out.println("\nparse :" + script);
-        tokenReader = lexer.tokenize(script);
-        dump(tokenReader);
-
-        //测试in的解析
-        script = "in age = 45;";
-        System.out.println("\nparse :" + script);
-        tokenReader = lexer.tokenize(script);
-        dump(tokenReader);
-
-        //测试>=的解析
-        script = "age >= 45;";
-        System.out.println("\nparse :" + script);
-        tokenReader = lexer.tokenize(script);
-        dump(tokenReader);
-
-        //测试>的解析
-        script = "age > 45;";
-        System.out.println("\nparse :" + script);
-        tokenReader = lexer.tokenize(script);
-        dump(tokenReader);
-    }
-
     //下面几个变量是在解析过程中用到的临时变量,如果要优化的话，可以塞到方法里隐藏起来
     private StringBuffer tokenText = null;   //临时保存token的文本
     private List<Token> tokens = null;       //保存解析出来的Token
     private SimpleToken token = null;        //当前正在解析的Token
 
-    //是否是字母
-    private boolean isAlpha(int ch) {
-        return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z';
-    }
-
-    //是否是数字
-    private boolean isDigit(int ch) {
-        return ch >= '0' && ch <= '9';
-    }
-
-    //是否是空白字符
-    private boolean isBlank(int ch) {
-        return ch == ' ' || ch == '\t' || ch == '\n';
-    }
 
     /**
      * 有限状态机进入初始状态。
@@ -150,7 +104,7 @@ public class SimpleLexer {
      * @return
      */
     public SimpleTokenReader tokenize(String code) {
-        tokens = new ArrayList<Token>();
+        tokens = new ArrayList<>();
         CharArrayReader reader = new CharArrayReader(code.toCharArray());
         tokenText = new StringBuffer();
         token = new SimpleToken();
@@ -246,7 +200,6 @@ public class SimpleLexer {
     }
 
     /**
-     * /**
      * 打印所有的Token
      *
      * @param tokenReader
